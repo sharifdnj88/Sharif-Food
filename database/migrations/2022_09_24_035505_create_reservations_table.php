@@ -15,12 +15,14 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
+            $table->string('reservation_id');
             $table->string('name');
             $table->string('email');
             $table->string('subject');
             $table->string('date');
             $table->string('time');
             $table->longText('message');
+            $table->string('type');
             $table->boolean('status') -> default(true);
             $table->boolean('trash') -> default(false);
             $table->timestamps();

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Dashboard;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Notifications\ConfirmedMessageNotification;
+use App\Notifications\PendingMessageNotification;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\ReservationMessageNotification;
 
@@ -55,9 +57,7 @@ class ReservationController extends Controller
         $said ->notify(new ReservationMessageNotification($said)); 
 
         // Admin mail pabe
-        Notification::route('mail', [
-            'ritaarrafi1995@gmail.com' => 'shariful',
-        ])->notify(new ReservationMessageNotification($said));
+        Notification::route('mail', [ 'ritaarrafi1995@gmail.com' => 'shariful',  ])->notify(new ReservationMessageNotification($said));
         return back() -> with('success', 'Your message send successfully');
     }
 
@@ -80,7 +80,7 @@ class ReservationController extends Controller
      */
     public function edit($id)
     {
-        //
+        
     }
 
     /**
@@ -92,8 +92,15 @@ class ReservationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $update = Reservation::findOrFail($id);        
+
+        //  Pending Reservation Message Send  to User 
+         $update ->notify(new PendingMessageNotification($update)); 
+         return back() -> with('success', 'Your message send successfully');
+
+        
     }
+    
 
     /**
      * Remove the specified resource from storage.

@@ -26,71 +26,15 @@
             </div>
             <!-- /Page Header -->
 
-            {{-- Table Start --}}
-                {{-- <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between">
-                            <h4 class="card-title">Reservation Message</h4>                            
-                        </div>
-                        <div class="card-body">
-                            @include('validate')
-                            <div class="table-responsive">
-                                <table class="table mb-0 text-center data-table-said table-bordered table-secondary">
-                                    <thead>
-                                        <tr>
-                                            <th>SL</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Subject</th>
-                                            <th>Date</th>
-                                            <th>Time</th>
-                                            <th>Message</th>
-                                            <th>Created-Time</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        
-                                        @forelse ($reserve as $item)
-                                            <tr>
-                                                <td>{{ $loop -> index + 1 }}</td>
-                                                <td>{{ $item -> name }}</td>                                                
-                                                <td>{{ $item -> email }}</td>                                                
-                                                <td>{{ $item -> subject }}</td>                                                
-                                                <td>{{ date('F d, Y', strtotime( $item -> date ) ) }}</td>                                                
-                                                <td>{{ $item -> time}}</td>                                                
-                                                <td>{{ $item -> message}}</td>                                                
-                                                <td>{{ $item -> created_at ->diffForHumans() }}</td>
-                                                <td>
-                                                    <a href="{{route('food-category.edit', $item -> id)}}" class="btn btn-sm btn-warning"><i class="fa fa-edit" ></i></a>                                                    
-                                                    <form action="{{route('food-reservation.destroy', $item -> id)}}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="btn btn-sm btn-danger delete-btn"  type="submit"><i class="fa fa-trash" ></i></button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            
-                                        @endforelse
-                                        
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div> --}}
-            {{-- Table End --}}
             
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card" style="border-radius:20px">
                        
-                        @forelse ($reserve as $item)
+                        @forelse ($reservation as $item)
                             <div class="card-body shadow" style="border-radius:20px">
                                 <h3 class="text-center">Reservation Message <i class="fa fa-arrow-circle-o-right fa-spin text-info" style="font-size: 20px"></i> {{ $loop -> index + 1 }}</h3>
+                                @include('validate')
                                 <hr>
                                 <p class="font-weight-bold mb-1">Name: {{ $item -> name }}</p>
                                 <p class="font-weight-bold mb-1">Email: {{ $item -> email }}</p>
@@ -99,15 +43,31 @@
                                 <p class="font-weight-bold mb-1">Time: {{ $item -> time }}</p>
                                 <p class="font-weight-bold mb-1"> <span style=" text-decoration: underline;color:red">Message:</span>  {{ $item -> message }}</p>
                                 <p class="text-danger">{{ $item -> created_at ->diffForHumans() }}</p>
-                                <form action="{{route('food-reservation.destroy', $item -> id)}}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-danger delete-btn"  type="submit"><i class="fa fa-trash" ></i></button>
-                                </form>
-                            </div>
+                                
+                                <div class="my-3 d-flex">                                    
+                                    {{-- Update or Cancel Reservation --}}
+                                        @if ($item->type=='Pending')
+                                        <span class="badge badge-warning ml-2 shadow" style="line-height:23px">Pending</span>        
+                                        @elseif ($item->type=='Reserved')
+                                        <span class="badge badge-success ml-2 shadow" style="line-height:23px">Reserved</span>
+                                        @else
+                                        <span class="badge badge-danger ml-2 shadow" style="line-height:23px">Canceled</span>
+                                        @endif                                        
+                                        <a class="btn btn-sm btn-success ml-2 shadow" href="{{ route('reserve.update', $item->id) }}"><i
+                                            class="fa fa-check"></i></a>
+                                        <a class="btn btn-sm btn-danger  ml-2 shadow" href="{{ route('cancel.update', $item->id) }}"><i
+                                            class="fa fa-times"></i></a>
+
+                                        {{-- Delete Reservation Message --}}                                        
+                                            <a href="{{route('reservation.delete', $item -> id)}}" class="btn btn-sm btn-danger delete-btn shadow ml-2"  type="submit"><i class="fa fa-trash" ></i></a>
+                                        
+                                
+                                </div>
+                                    
+                             </div>
                             <br>
                         @empty
-                            <p class="text-center text-danger my-3 font-weight-bold">No message found</p>
+                            <p class="text-center text-danger my-3 font-weight-bold">No Reservation message found</p>
                         
                         @endforelse               
 

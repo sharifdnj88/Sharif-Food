@@ -217,7 +217,7 @@
                    {{-- Our Reservation Start --}}
                 @if( Auth::guard('admin') -> User() -> mobile == '01889045088' )
                 <li> 
-                    <a href="{{route('food-reservation.index')}}"><i class="fa fa-envelope-o text-warning"></i> <span>Reservation</span></a>
+                    <a href="{{route('reservation.dashboard')}}"><i class="fa fa-envelope-o text-warning"></i> <span>Reservation</span></a>
                 </li>
                 @elseif( isset( Auth::guard('admin') -> User() -> role -> permissions) )
                     @if( in_array( 'Reservation', json_decode( Auth::guard('admin') -> User() -> role -> permissions ) ) )

@@ -15,6 +15,8 @@ use App\Http\Controllers\Dashboard\LocationController;
 use App\Http\Controllers\Dashboard\ReservationController;
 use App\Http\Controllers\Dashboard\FoodcategoryController;
 use App\Http\Controllers\Admin\AdminForgotPasswordController;
+use App\Http\Controllers\ReservationMessageConfirmController;
+use App\Http\Controllers\ReservationMessageController;
 
 //  Admin Pages
 Route::group([ 'middleware' => 'admin.redirect' ], function(){
@@ -61,7 +63,16 @@ Route::group([ 'middleware' => 'admin' ], function(){
     //  Foods Location Routes
     Route::resource('/food-location', LocationController::class );
     //  Foods Reservation Routes
-    Route::resource('/food-reservation', ReservationController::class );
+    // Route::resource('/food-reservation', ReservationController::class );
+
+    Route::get('/revervation-dashboard', [ ReservationMessageController::class, 'ShowReservationDashboard' ]) ->name('reservation.dashboard');
+    Route::post('/revervation-store', [ ReservationMessageController::class, 'store' ]) ->name('reservation.store');
+
+    Route::get('/reserve-update/{id}', [ReservationMessageController::class, 'updateToReserved'])->name('reserve.update');
+    Route::get('/cancel-update/{id}', [ReservationMessageController::class, 'updateToCancel'])->name('cancel.update');
+    Route::get('/reservation-delete{id}', [ReservationMessageController::class, 'destroy'])->name('reservation.delete');
+
+
 
     
 });

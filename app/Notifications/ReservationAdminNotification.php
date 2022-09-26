@@ -7,30 +7,33 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ReservationMessageNotification extends Notification
+class ReservationAdminNotification extends Notification
 {
     use Queueable;
+    public $id;
     private $name;
     private $email;
     private $subject;
     private $date;
     private $time;
     private $message;
-
+    private $type;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($said)
+    public function __construct($data)
     {
-        $this -> name       = $said -> name;
-        $this -> email       = $said -> email;
-        $this -> subject     = $said -> subject;
-        $this -> date         = $said -> date;
-        $this -> time         = $said -> time;
-        $this -> message    = $said -> message;
+        $this->id = $data->reservation_id;
+        $this->name = $data->name;
+        $this->email = $data->email;
+        $this->subject = $data->subject;
+        $this->date = $data->date;
+        $this->time = $data->time;
+        $this->message = $data->message;
+        $this->type = $data->type;
     }
 
     /**
@@ -53,15 +56,14 @@ class ReservationMessageNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    // ->line('Hi '. $this -> name . ' Welcome to our company')
-                    ->line('Name: '. $this -> name)
-                    ->line('Email: '. $this -> email)
-                    ->line('Subject: '. $this -> subject)
-                    ->line('Date: '. $this -> date)
-                    ->line('Time: '. $this -> time)
-                    ->line('Message: '. $this -> message)
-                    // ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->line($this->name .', Send a reservation request.')
+                    ->line('Reservation ID: '.$this->id)
+                    ->line('Email: '.$this->email)
+                    ->line('subject: '.$this->subject)
+                    ->line('message: '.$this->message)
+                    ->line('Date: '.$this->date)
+                    ->line('Time: '.$this->time)
+                    ->action('Accept/Reject', url('/admin-login'));
     }
 
     /**

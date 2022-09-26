@@ -39,7 +39,7 @@
                                         @if( Session::has('success') )
                                             <p class="alert alert-success" id="close-reser" style="font-weight: bold;text-align:center">{{ Session::get('success') }}<button class="close" id="reser-close" data-dismiss="alert" style="margin-left:5px;background-color:green;color:white;outline:none;border: none;border-radius:5px;cursor: pointer;"> &times; </button></p>
                                         @endif
-                                        <form action="{{route('food-reservation.store')}}" name="contact" id="contact" method="POST">
+                                        <form action="{{route('reservation.store')}}" name="contact" id="contact" method="POST">
                                             @csrf
                                             <label class="row">
                                                 <div class="col-1-2">
